@@ -1,20 +1,21 @@
-﻿namespace Fall2024_Assignment3_rweide.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Fall2024_Assignment3_rweide.Models
 {
     public class Movie
     {
-        string Name { get; set; }
-        string IMDBLink { get; set; }
-        string Genre { get; set; }
-        int YearOfRelease { get; set; }
-        string PosterURL { get; set; }
+        [Key]
+        public string IMDBMovieID { get; set; }
 
-        Movie()
-        {
-            Name = "Movie Name";
-            IMDBLink = "IMDB URL HERE";
-            Genre = "Action";
-            YearOfRelease = 2024;
-            PosterURL = "POSTER URL HERE";
-        }
+        [Required]
+        public string Name { get; set; }
+        [Required]
+        public string Genre { get; set; }
+        [Required]
+        public int YearOfRelease { get; set; }
+        [Required]
+        public string PosterURL { get; set; }
+
+        public ICollection<Actor> Actors { get; set; } = new List<Actor>();
     }
 }

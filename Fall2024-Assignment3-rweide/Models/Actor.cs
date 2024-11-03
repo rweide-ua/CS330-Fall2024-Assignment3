@@ -1,20 +1,21 @@
-﻿namespace Fall2024_Assignment3_rweide.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Fall2024_Assignment3_rweide.Models
 {
     public class Actor
     {
-        string Name { get; set; }
-        string Gender { get; set; }
-        int Age { get; set; }
-        string IMDBLink { get; set; }
-        string ProfilePhoto { get; set; }
+        [Key]
+        public string IMDBActorID { get; set; }
 
-        Actor()
-        {
-            Name = "Actor Name";
-            Gender = "Unknown";
-            Age = 32;
-            IMDBLink = "IMDB LINK HERE";
-            ProfilePhoto = "PHOTO LINK HERE";
-        }
+        [Required]
+        public string Name { get; set; }
+        [Required]
+        public string Gender { get; set; }
+        [Required]
+        public int Age { get; set; }
+        [Required]
+        public string ProfilePhoto { get; set; }
+
+        public ICollection<Movie> Movies { get; set; } = new List<Movie>();
     }
 }
