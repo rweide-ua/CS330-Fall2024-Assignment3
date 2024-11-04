@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fall2024_Assignment3_rweide.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241103204225_Initial")]
+    [Migration("20241104035121_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -22,28 +22,33 @@ namespace Fall2024_Assignment3_rweide.Migrations
 
             modelBuilder.Entity("ActorMovie", b =>
                 {
-                    b.Property<string>("ActorsIMDBActorID")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("ActorsId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("MoviesIMDBMovieID")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("MoviesId")
+                        .HasColumnType("INTEGER");
 
-                    b.HasKey("ActorsIMDBActorID", "MoviesIMDBMovieID");
+                    b.HasKey("ActorsId", "MoviesId");
 
-                    b.HasIndex("MoviesIMDBMovieID");
+                    b.HasIndex("MoviesId");
 
                     b.ToTable("ActorMovie");
                 });
 
             modelBuilder.Entity("Fall2024_Assignment3_rweide.Models.Actor", b =>
                 {
-                    b.Property<string>("IMDBActorID")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Age")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("IMDBActorID")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -55,17 +60,22 @@ namespace Fall2024_Assignment3_rweide.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("IMDBActorID");
+                    b.HasKey("Id");
 
                     b.ToTable("Actor");
                 });
 
             modelBuilder.Entity("Fall2024_Assignment3_rweide.Models.Movie", b =>
                 {
-                    b.Property<string>("IMDBMovieID")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Genre")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("IMDBMovieID")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -80,9 +90,30 @@ namespace Fall2024_Assignment3_rweide.Migrations
                     b.Property<int>("YearOfRelease")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("IMDBMovieID");
+                    b.HasKey("Id");
 
                     b.ToTable("Movie");
+                });
+
+            modelBuilder.Entity("Fall2024_Assignment3_rweide.Models.MovieActor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ActorId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MovieId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActorId");
+
+                    b.HasIndex("MovieId");
+
+                    b.ToTable("MovieActor");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -285,15 +316,34 @@ namespace Fall2024_Assignment3_rweide.Migrations
                 {
                     b.HasOne("Fall2024_Assignment3_rweide.Models.Actor", null)
                         .WithMany()
-                        .HasForeignKey("ActorsIMDBActorID")
+                        .HasForeignKey("ActorsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Fall2024_Assignment3_rweide.Models.Movie", null)
                         .WithMany()
-                        .HasForeignKey("MoviesIMDBMovieID")
+                        .HasForeignKey("MoviesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Fall2024_Assignment3_rweide.Models.MovieActor", b =>
+                {
+                    b.HasOne("Fall2024_Assignment3_rweide.Models.Actor", "Actor")
+                        .WithMany()
+                        .HasForeignKey("ActorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Fall2024_Assignment3_rweide.Models.Movie", "Movie")
+                        .WithMany()
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Actor");
+
+                    b.Navigation("Movie");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -5,8 +5,10 @@ namespace Fall2024_Assignment3_rweide.Models
     public class Actor
     {
         [Key]
-        public string IMDBActorID { get; set; }
+        public int Id { get; set; }
 
+        [Required]
+        public string IMDBActorID { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]

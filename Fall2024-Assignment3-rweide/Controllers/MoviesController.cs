@@ -28,21 +28,29 @@ namespace Fall2024_Assignment3_rweide.Controllers
         }
 
         // GET: Movies/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Movie == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
             var movie = await _context.Movie
-                .FirstOrDefaultAsync(m => m.IMDBMovieID == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (movie == null)
             {
                 return NotFound();
             }
 
-            return View(movie);
+            var actors = await _context.MovieActor
+                .Include(cs => cs.Actor)
+                .Where(cs => cs.MovieId == movie.Id)
+                .Select(cs => cs.Actor)
+                .ToListAsync();
+
+            var vm = new MovieDetailsViewModel(movie, actors);
+
+            return View(vm);
         }
 
         // GET: Movies/Create
@@ -56,7 +64,7 @@ namespace Fall2024_Assignment3_rweide.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IMDBMovieID,Name,Genre,YearOfRelease,PosterURL")] Movie movie)
+        public async Task<IActionResult> Create([Bind("Id,IMDBMovieID,Name,Genre,YearOfRelease,PosterURL")] Movie movie)
         {
             if (ModelState.IsValid)
             {
@@ -68,7 +76,7 @@ namespace Fall2024_Assignment3_rweide.Controllers
         }
 
         // GET: Movies/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(int id)
         {
             if (id == null || _context.Movie == null)
             {
@@ -88,9 +96,9 @@ namespace Fall2024_Assignment3_rweide.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("IMDBMovieID,Name,Genre,YearOfRelease,PosterURL")] Movie movie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,IMDBMovieID,Name,Genre,YearOfRelease,PosterURL")] Movie movie)
         {
-            if (id != movie.IMDBMovieID)
+            if (id != movie.Id)
             {
                 return NotFound();
             }
@@ -104,7 +112,7 @@ namespace Fall2024_Assignment3_rweide.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MovieExists(movie.IMDBMovieID))
+                    if (!MovieExists(movie.Id))
                     {
                         return NotFound();
                     }
@@ -119,7 +127,7 @@ namespace Fall2024_Assignment3_rweide.Controllers
         }
 
         // GET: Movies/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (id == null || _context.Movie == null)
             {
@@ -127,7 +135,7 @@ namespace Fall2024_Assignment3_rweide.Controllers
             }
 
             var movie = await _context.Movie
-                .FirstOrDefaultAsync(m => m.IMDBMovieID == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (movie == null)
             {
                 return NotFound();
@@ -139,7 +147,7 @@ namespace Fall2024_Assignment3_rweide.Controllers
         // POST: Movies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Movie == null)
             {
@@ -155,9 +163,9 @@ namespace Fall2024_Assignment3_rweide.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool MovieExists(string id)
+        private bool MovieExists(int id)
         {
-          return (_context.Movie?.Any(e => e.IMDBMovieID == id)).GetValueOrDefault();
+          return (_context.Movie?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

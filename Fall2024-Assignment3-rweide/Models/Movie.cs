@@ -5,8 +5,11 @@ namespace Fall2024_Assignment3_rweide.Models
     public class Movie
     {
         [Key]
-        public string IMDBMovieID { get; set; }
+        public int Id { get; set; }
 
+
+        [Required]
+        public string IMDBMovieID { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]

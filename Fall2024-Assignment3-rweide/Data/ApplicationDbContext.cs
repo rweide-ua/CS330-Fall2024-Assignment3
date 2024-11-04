@@ -12,5 +12,6 @@ public class ApplicationDbContext : IdentityDbContext
     }
     public DbSet<Fall2024_Assignment3_rweide.Models.Movie> Movie { get; set; } = default!;
     public DbSet<Fall2024_Assignment3_rweide.Models.Actor> Actor { get; set; } = default!;
+    public DbSet<Fall2024_Assignment3_rweide.Models.MovieActor> MovieActor { get; set; } = default!;
 }
 

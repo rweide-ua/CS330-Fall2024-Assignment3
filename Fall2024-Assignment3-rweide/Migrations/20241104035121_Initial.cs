@@ -15,6 +15,8 @@ namespace Fall2024_Assignment3_rweide.Migrations
                 name: "Actor",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     IMDBActorID = table.Column<string>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Gender = table.Column<string>(type: "TEXT", nullable: false),
@@ -23,7 +25,7 @@ namespace Fall2024_Assignment3_rweide.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Actor", x => x.IMDBActorID);
+                    table.PrimaryKey("PK_Actor", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -69,6 +71,8 @@ namespace Fall2024_Assignment3_rweide.Migrations
                 name: "Movie",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     IMDBMovieID = table.Column<string>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Genre = table.Column<string>(type: "TEXT", nullable: false),
@@ -77,7 +81,7 @@ namespace Fall2024_Assignment3_rweide.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Movie", x => x.IMDBMovieID);
+                    table.PrimaryKey("PK_Movie", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -190,30 +194,56 @@ namespace Fall2024_Assignment3_rweide.Migrations
                 name: "ActorMovie",
                 columns: table => new
                 {
-                    ActorsIMDBActorID = table.Column<string>(type: "TEXT", nullable: false),
-                    MoviesIMDBMovieID = table.Column<string>(type: "TEXT", nullable: false)
+                    ActorsId = table.Column<int>(type: "INTEGER", nullable: false),
+                    MoviesId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ActorMovie", x => new { x.ActorsIMDBActorID, x.MoviesIMDBMovieID });
+                    table.PrimaryKey("PK_ActorMovie", x => new { x.ActorsId, x.MoviesId });
                     table.ForeignKey(
-                        name: "FK_ActorMovie_Actor_ActorsIMDBActorID",
-                        column: x => x.ActorsIMDBActorID,
+                        name: "FK_ActorMovie_Actor_ActorsId",
+                        column: x => x.ActorsId,
                         principalTable: "Actor",
-                        principalColumn: "IMDBActorID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ActorMovie_Movie_MoviesIMDBMovieID",
-                        column: x => x.MoviesIMDBMovieID,
+                        name: "FK_ActorMovie_Movie_MoviesId",
+                        column: x => x.MoviesId,
                         principalTable: "Movie",
-                        principalColumn: "IMDBMovieID",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MovieActor",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    MovieId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ActorId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MovieActor", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MovieActor_Actor_ActorId",
+                        column: x => x.ActorId,
+                        principalTable: "Actor",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MovieActor_Movie_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "Movie",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ActorMovie_MoviesIMDBMovieID",
+                name: "IX_ActorMovie_MoviesId",
                 table: "ActorMovie",
-                column: "MoviesIMDBMovieID");
+                column: "MoviesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -251,6 +281,16 @@ namespace Fall2024_Assignment3_rweide.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MovieActor_ActorId",
+                table: "MovieActor",
+                column: "ActorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MovieActor_MovieId",
+                table: "MovieActor",
+                column: "MovieId");
         }
 
         /// <inheritdoc />
@@ -275,16 +315,19 @@ namespace Fall2024_Assignment3_rweide.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Actor");
-
-            migrationBuilder.DropTable(
-                name: "Movie");
+                name: "MovieActor");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Actor");
+
+            migrationBuilder.DropTable(
+                name: "Movie");
         }
     }
 }

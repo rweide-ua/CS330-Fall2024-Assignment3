@@ -16,6 +16,9 @@
                 @Html.DisplayNameFor(model => model.IMDBMovieID)
             </th>
             <th>
+                IMDB Link
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
@@ -34,7 +37,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                    @Html.DisplayFor(modelItem => item.IMDBMovieID)
+                @Html.DisplayFor(modelItem => item.IMDBMovieID)
+            </td>
+            <td>
+                    <a href="https://www.imdb.com/title/@item.IMDBMovieID">Link</a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -49,9 +55,9 @@
                 <img src="@item.PosterURL" style="width: 100px; height: auto;" />
             </td>
             <td>
-                    <a asp-action="Edit" asp-route-id="@item.IMDBMovieID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.IMDBMovieID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.IMDBMovieID">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }

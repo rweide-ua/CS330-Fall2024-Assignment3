@@ -1,4 +1,4 @@
-﻿@model Fall2024_Assignment3_rweide.Models.Movie
+﻿@model Fall2024_Assignment3_rweide.Models.MovieDetailsViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -11,45 +11,70 @@
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.IMDBMovieID)
+            @Html.DisplayNameFor(model => model.Movie.IMDBMovieID)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.IMDBMovieID)
+            @Html.DisplayFor(model => model.Movie.IMDBMovieID)
         </dd>
         <dt class="col-sm-2">
             IMDB Link
         </dt>
         <dd class="col-sm-10">
-            <a href="https://www.imdb.com/title/@Model.IMDBMovieID">Link</a>
+            <a href="https://www.imdb.com/title/@Model.Movie.IMDBMovieID">Link</a>
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Movie.Name)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Movie.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Genre)
+            @Html.DisplayNameFor(model => model.Movie.Genre)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Genre)
+            @Html.DisplayFor(model => model.Movie.Genre)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.YearOfRelease)
+            @Html.DisplayNameFor(model => model.Movie.YearOfRelease)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.YearOfRelease)
+            @Html.DisplayFor(model => model.Movie.YearOfRelease)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PosterURL)
+            @Html.DisplayNameFor(model => model.Movie.PosterURL)
         </dt>
         <dd class = "col-sm-10">
-            <!-- @Html.DisplayFor(model => model.PosterURL) -->
-            <img src="@Model.PosterURL" style="width: 100px; height: auto;"/>
+            <!-- @Html.DisplayFor(model => model.Movie.PosterURL) -->
+            <img src="@Model.Movie.PosterURL" style="width: 100px; height: auto;" />
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.IMDBMovieID">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model?.Movie.IMDBMovieID">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Actors)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Actors)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-controller="Actors" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-controller="Actors" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-controller="Actors" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
