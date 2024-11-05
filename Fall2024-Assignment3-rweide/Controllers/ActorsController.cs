@@ -8,6 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using Fall2024_Assignment3_rweide.Data;
 using Fall2024_Assignment3_rweide.Models;
 using VaderSharp2;
+using Azure.AI.OpenAI;
+using System.ClientModel;
+using OpenAI.Chat;
+using Newtonsoft.Json;
 
 namespace Fall2024_Assignment3_rweide.Controllers
 {
@@ -17,9 +21,18 @@ namespace Fall2024_Assignment3_rweide.Controllers
 
         private SentimentIntensityAnalyzer analyzer;
 
-        public ActorsController(ApplicationDbContext context)
+        private readonly IConfiguration _config;
+        private AzureOpenAIClient azureClient;
+        private ChatClient chatClient;
+
+        public ActorsController(ApplicationDbContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;
+            azureClient = new(
+                new Uri("https://fall2024-rweide-openai.openai.azure.com/"),
+                new ApiKeyCredential(_config["OpenAI:Secret"]));
+            chatClient = azureClient.GetChatClient("gpt-35-turbo");
             analyzer = new SentimentIntensityAnalyzer();
         }
 
@@ -58,14 +71,16 @@ namespace Fall2024_Assignment3_rweide.Controllers
             var tweet1 = new TextSentimentPair("Hi I'm an actor and I'm really cool", 0.8f);
             var tweet2 = new TextSentimentPair("This thing is AWFUL", -0.9f);
             var tweet3 = new TextSentimentPair("I am neutral about this topic", 0.01f);
-            // var tweets = new List<TextSentimentPair>{ tweet1, tweet2, tweet3 };
 
-            var tweetTexts = new List<string>();
-            tweetTexts.Add("Yo what's up?");
-            tweetTexts.Add("Today just keeps getting worse and worse");
-            tweetTexts.Add("Just got a ticket to the hottest band let's goooo! I love these guys!");
-            tweetTexts.Add("Hope you're all having an awesome day :)");
-            tweetTexts.Add("Ughhh I hate waiting in line bro");
+            ChatCompletion completion = chatClient.CompleteChat(new UserChatMessage("Write twenty tweets as if they were written by actor " + actor.Name + ". Make sure these are true to the actor's personality and base these off of their existing tweets. These tweets should follow the real rules of Twitter, where each tweet only contains 140 characters or less. Some tweets can have hashtags in them, but not all tweets should. PLEASE make sure to return the tweets with semicolons separating them for easier separation in code later. Do not add brackets at the beginning and ending. An example response should be, without brackets: [Here's a tweet; Here's another tweet; Here's yet another tweet]. PLEASE do not surround the enclosed tweets with quotation marks. PLEASE ensure there are no brackets at the start or end of the response. Tweets should only be separated by a SINGLE semicolon, not two or three. Additionally, the contents of a tweet should NOT contain a semicolon WHATSOEVER. DO NOT UNDER ANY CIRCUMSTANCE GIVE A RESPONSE THAT STARTS WITH \"As an AI language model\". ONLY RESPOND WITH THE REQUESTED TEXT."));
+
+            var aiTweets = completion.Content[0].Text;
+            string[] tweetTexts = aiTweets.Split(';');
+
+            // tweetTexts.Add("Today just keeps getting worse and worse");
+            // tweetTexts.Add("Just got a ticket to the hottest band let's goooo! I love these guys!");
+            // tweetTexts.Add("Hope you're all having an awesome day :)");
+            // tweetTexts.Add("Ughhh I hate waiting in line bro");
 
             var tweets = new List<TextSentimentPair>();
 
