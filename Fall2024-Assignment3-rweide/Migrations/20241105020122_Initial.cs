@@ -21,7 +21,7 @@ namespace Fall2024_Assignment3_rweide.Migrations
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Gender = table.Column<string>(type: "TEXT", nullable: false),
                     Age = table.Column<int>(type: "INTEGER", nullable: false),
-                    ProfilePhoto = table.Column<string>(type: "TEXT", nullable: false)
+                    Photo = table.Column<byte[]>(type: "BLOB", nullable: true)
                 },
                 constraints: table =>
                 {

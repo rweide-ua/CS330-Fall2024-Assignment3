@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fall2024_Assignment3_rweide.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241104035121_Initial")]
+    [Migration("20241105020122_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -56,9 +56,8 @@ namespace Fall2024_Assignment3_rweide.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ProfilePhoto")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<byte[]>("Photo")
+                        .HasColumnType("BLOB");
 
                     b.HasKey("Id");
 

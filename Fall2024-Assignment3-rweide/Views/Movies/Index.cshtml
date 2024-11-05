@@ -13,9 +13,6 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.IMDBMovieID)
-            </th>
-            <th>
                 IMDB Link
             </th>
             <th>
@@ -36,9 +33,6 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.IMDBMovieID)
-            </td>
             <td>
                     <a href="https://www.imdb.com/title/@item.IMDBMovieID">Link</a>
             </td>

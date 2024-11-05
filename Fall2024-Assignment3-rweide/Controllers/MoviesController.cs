@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Fall2024_Assignment3_rweide.Data;
 using Fall2024_Assignment3_rweide.Models;
+using VaderSharp2;
 
 namespace Fall2024_Assignment3_rweide.Controllers
 {
@@ -14,9 +15,12 @@ namespace Fall2024_Assignment3_rweide.Controllers
     {
         private readonly ApplicationDbContext _context;
 
+        private SentimentIntensityAnalyzer analyzer;
+
         public MoviesController(ApplicationDbContext context)
         {
             _context = context;
+            analyzer = new SentimentIntensityAnalyzer();
         }
 
         // GET: Movies
@@ -52,10 +56,25 @@ namespace Fall2024_Assignment3_rweide.Controllers
             // Get sentiment analysis here
             // Pass this to MovieDetailsViewModel
 
-            var review1 = new TextSentimentPair("This movie is really good!", 0.9f);
-            var review2 = new TextSentimentPair("This movie is really BAD.", -0.9f);
-            var review3 = new TextSentimentPair("This movie is okay. Not great but not bad.", 0.2f);
-            var reviews = new List<TextSentimentPair> { review1, review2, review3 };
+            var reviewTexts = new List<string>();
+            reviewTexts.Add("This movie is great!");
+            reviewTexts.Add("This movie is terrible!");
+            reviewTexts.Add("This movie is okay.");
+            reviewTexts.Add("I really liked when the guy did the thing.");
+            reviewTexts.Add("The worst writing I've ever seen in my life! I left the theater as soon as he said \"He's right behind me, isn't he?\"");
+
+            var reviews = new List<TextSentimentPair>();
+
+            foreach (var review in reviewTexts)
+            {
+                var sentimentCompound = analyzer.PolarityScores(review).Compound;
+                reviews.Add(new TextSentimentPair(review, sentimentCompound));
+            }
+
+            // var review1 = new TextSentimentPair("This movie is really good!", 0.9);
+            // var review2 = new TextSentimentPair("This movie is really BAD.", -0.9);
+            // var review3 = new TextSentimentPair("This movie is okay. Not great but not bad.", 0.2);
+            // var reviews = new List<TextSentimentPair> { review1, review2, review3 };
 
             var vm = new MovieDetailsViewModel(movie, actors, reviews);
 

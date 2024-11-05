@@ -15,8 +15,7 @@ namespace Fall2024_Assignment3_rweide.Models
         public string Gender { get; set; }
         [Required]
         public int Age { get; set; }
-        [Required]
-        public string ProfilePhoto { get; set; }
+        public byte[]? Photo { get; set; }
 
         public ICollection<Movie> Movies { get; set; } = new List<Movie>();
     }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Fall2024_Assignment3_rweide.Data;
 using Fall2024_Assignment3_rweide.Models;
+using VaderSharp2;
 
 namespace Fall2024_Assignment3_rweide.Controllers
 {
@@ -14,9 +15,12 @@ namespace Fall2024_Assignment3_rweide.Controllers
     {
         private readonly ApplicationDbContext _context;
 
+        private SentimentIntensityAnalyzer analyzer;
+
         public ActorsController(ApplicationDbContext context)
         {
             _context = context;
+            analyzer = new SentimentIntensityAnalyzer();
         }
 
         // GET: Actors
@@ -54,7 +58,22 @@ namespace Fall2024_Assignment3_rweide.Controllers
             var tweet1 = new TextSentimentPair("Hi I'm an actor and I'm really cool", 0.8f);
             var tweet2 = new TextSentimentPair("This thing is AWFUL", -0.9f);
             var tweet3 = new TextSentimentPair("I am neutral about this topic", 0.01f);
-            var tweets = new List<TextSentimentPair>{ tweet1, tweet2, tweet3 };
+            // var tweets = new List<TextSentimentPair>{ tweet1, tweet2, tweet3 };
+
+            var tweetTexts = new List<string>();
+            tweetTexts.Add("Yo what's up?");
+            tweetTexts.Add("Today just keeps getting worse and worse");
+            tweetTexts.Add("Just got a ticket to the hottest band let's goooo! I love these guys!");
+            tweetTexts.Add("Hope you're all having an awesome day :)");
+            tweetTexts.Add("Ughhh I hate waiting in line bro");
+
+            var tweets = new List<TextSentimentPair>();
+
+            foreach (var tweet in tweetTexts)
+            {
+                var sentimentCompound = analyzer.PolarityScores(tweet).Compound;
+                tweets.Add(new TextSentimentPair(tweet, sentimentCompound));
+            }
 
             var vm = new ActorDetailsViewModel(actor, movies, tweets);
 
@@ -72,10 +91,16 @@ namespace Fall2024_Assignment3_rweide.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,IMDBActorID,Name,Gender,Age,ProfilePhoto")] Actor actor)
+        public async Task<IActionResult> Create([Bind("Id,IMDBActorID,Name,Gender,Age")] Actor actor, IFormFile? photo)
         {
             if (ModelState.IsValid)
             {
+                if (photo != null && photo.Length > 0)
+                {
+                    using var memoryStream = new MemoryStream(); // Dispose() for garbage collection 
+                    photo.CopyTo(memoryStream);
+                    actor.Photo = memoryStream.ToArray();
+                }
                 _context.Add(actor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

@@ -13,9 +13,6 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.IMDBActorID)
-            </th>
-            <th>
                 IMDB Link
             </th>
             <th>
@@ -28,7 +25,7 @@
                 @Html.DisplayNameFor(model => model.Age)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProfilePhoto)
+                Profile Picture
             </th>
             <th></th>
         </tr>
@@ -36,9 +33,6 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.IMDBActorID)
-            </td>
             <td>
                 <a href="https://www.imdb.com/name/@item.IMDBActorID">Link</a>
             </td>
@@ -52,8 +46,15 @@
                 @Html.DisplayFor(modelItem => item.Age)
             </td>
             <td>
-                <!-- @Html.DisplayFor(modelItem => item.ProfilePhoto) -->
-                <img src="@item.ProfilePhoto" style="width: 100px; height: auto;" />
+                @if (item.Photo != null)
+                {
+                    var base64 = Convert.ToBase64String(item.Photo);
+                    var imgSrc = $"data:image/jpg;base64,{base64}";
+                    <img src="@imgSrc" width="100" height="100" />
+                } else
+                {
+                    <p>No photo found.</p>
+                }
             </td>
             <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
