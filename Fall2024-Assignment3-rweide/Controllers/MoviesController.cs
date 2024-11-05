@@ -9,6 +9,9 @@ using Fall2024_Assignment3_rweide.Data;
 using Fall2024_Assignment3_rweide.Models;
 using VaderSharp2;
 using System.Numerics;
+using Azure.AI.OpenAI;
+using OpenAI.Chat;
+using System.ClientModel;
 
 namespace Fall2024_Assignment3_rweide.Controllers
 {
@@ -18,9 +21,18 @@ namespace Fall2024_Assignment3_rweide.Controllers
 
         private SentimentIntensityAnalyzer analyzer;
 
-        public MoviesController(ApplicationDbContext context)
+        private readonly IConfiguration _config;
+        private AzureOpenAIClient azureClient;
+        private ChatClient chatClient;
+
+        public MoviesController(ApplicationDbContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;
+            azureClient = new(
+                new Uri("https://fall2024-rweide-openai.openai.azure.com/"),
+                new ApiKeyCredential(_config["OpenAI:Secret"]));
+            chatClient = azureClient.GetChatClient("gpt-35-turbo");
             analyzer = new SentimentIntensityAnalyzer();
         }
 
@@ -57,12 +69,17 @@ namespace Fall2024_Assignment3_rweide.Controllers
             // Get sentiment analysis here
             // Pass this to MovieDetailsViewModel
 
-            var reviewTexts = new List<string>();
-            reviewTexts.Add("This movie is great!");
-            reviewTexts.Add("This movie is terrible!");
-            reviewTexts.Add("This movie is okay.");
-            reviewTexts.Add("I really liked when the guy did the thing.");
-            reviewTexts.Add("The worst writing I've ever seen in my life! I left the theater as soon as he said \"He's right behind me, isn't he?\"");
+            ChatCompletion completion = chatClient.CompleteChat(new UserChatMessage("Write ten INDIVIDUAL reviews for the movie " + movie.Name + " (" + movie.YearOfRelease.ToString() + "). Make sure these follow the existing online opinions and reviews of the movie. Each review should be of decent length, three to four sentences each. PLEASE make sure to return the review texts with semicolons separating them for easier separation in code later. Do not add brackets at the beginning and ending. An example response should be, without brackets: [Here's a review; Here's another review; Here's yet another review]. PLEASE do not surround the enclosed reviews with quotation marks. PLEASE ensure there are no brackets at the start or end of the response. Reviews should only be separated by a SINGLE semicolon, not two or three. Additionally, the contents of a review should NOT contain a semicolon WHATSOEVER. DO NOT UNDER ANY CIRCUMSTANCE GIVE A RESPONSE THAT STARTS WITH \"As an AI language model\". ONLY RESPOND WITH THE REQUESTED TEXT."));
+
+            var aiReviews = completion.Content[0].Text;
+            string[] reviewTexts = aiReviews.Split(';');
+
+            //var reviewTexts = new List<string>();
+            //reviewTexts.Add("This movie is great!");
+            //reviewTexts.Add("This movie is terrible!");
+            //reviewTexts.Add("This movie is okay.");
+            //reviewTexts.Add("I really liked when the guy did the thing.");
+            //reviewTexts.Add("The worst writing I've ever seen in my life! I left the theater as soon as he said \"He's right behind me, isn't he?\"");
 
             var reviews = new List<TextSentimentPair>();
 

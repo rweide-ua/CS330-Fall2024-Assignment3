@@ -11,7 +11,6 @@ using VaderSharp2;
 using Azure.AI.OpenAI;
 using System.ClientModel;
 using OpenAI.Chat;
-using Newtonsoft.Json;
 
 namespace Fall2024_Assignment3_rweide.Controllers
 {
