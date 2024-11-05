@@ -78,3 +78,28 @@
         }
     </tbody>
 </table>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Reviews
+            </th>
+            <th>
+                Sentiment
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Reviews)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Text)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SentimentCompound);
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

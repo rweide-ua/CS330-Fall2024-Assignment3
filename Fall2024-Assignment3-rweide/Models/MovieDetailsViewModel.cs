@@ -6,13 +6,16 @@ namespace Fall2024_Assignment3_rweide.Models
     {
         public Movie Movie { get; set; }
         public IEnumerable<Actor> Actors { get; set; }
+        public IEnumerable<TextSentimentPair> Reviews { get; set; }
 
-        // NOTE: In here is where we should get the AI-generated reviews for the movie, as well as perform the sentiment analysis?
+        // NOTE: In here is where we should store the AI-generated reviews for the movie, as well as store the sentiment analysis
+        // For sentiment analysis, we store the compound value? And from there, we sum all of the values up to come up with the overall sentiment
 
-        public MovieDetailsViewModel(Movie movie, IEnumerable<Actor> actors)
+        public MovieDetailsViewModel(Movie movie, IEnumerable<Actor> actors, IEnumerable<TextSentimentPair> reviews)
         {
             Movie = movie;
             Actors = actors;
+            Reviews = reviews;
         }
     }
 }

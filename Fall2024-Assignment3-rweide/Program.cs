@@ -5,6 +5,8 @@ using Fall2024_Assignment3_rweide.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+// Mutate connectionString here to have DB password
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(connectionString));

@@ -48,7 +48,15 @@ namespace Fall2024_Assignment3_rweide.Controllers
                 .Select(cs => cs.Movie)
                 .ToListAsync();
 
-            var vm = new ActorDetailsViewModel(actor, movies);
+            // Create ChatGPT responses here
+            // Get sentiment analysis here
+            // Pass this to MovieDetailsViewModel
+            var tweet1 = new TextSentimentPair("Hi I'm an actor and I'm really cool", 0.8f);
+            var tweet2 = new TextSentimentPair("This thing is AWFUL", -0.9f);
+            var tweet3 = new TextSentimentPair("I am neutral about this topic", 0.01f);
+            var tweets = new List<TextSentimentPair>{ tweet1, tweet2, tweet3 };
+
+            var vm = new ActorDetailsViewModel(actor, movies, tweets);
 
             return View(vm);
         }
