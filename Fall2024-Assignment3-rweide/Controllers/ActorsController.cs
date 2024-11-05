@@ -129,17 +129,31 @@ namespace Fall2024_Assignment3_rweide.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,IMDBActorID,Name,Gender,Age,ProfilePhoto")] Actor actor)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,IMDBActorID,Name,Gender,Age,Photo")] Actor actor, IFormFile? photo)
         {
             if (id != actor.Id)
             {
                 return NotFound();
             }
 
+            var existingActor = await _context.Actor
+                .AsNoTracking().FirstOrDefaultAsync(mo => mo.Id == id);
+
+            byte[]? existingActorPhoto = existingActor!.Photo;
+
             if (ModelState.IsValid)
             {
                 try
                 {
+                    if (photo != null && photo.Length > 0)
+                    {
+                        using var memoryStream = new MemoryStream(); // Dispose() for garbage collection 
+                        photo.CopyTo(memoryStream);
+                        actor.Photo = memoryStream.ToArray();
+                    } else
+                    {
+                        actor.Photo = existingActorPhoto;
+                    }
                     _context.Update(actor);
                     await _context.SaveChangesAsync();
                 }

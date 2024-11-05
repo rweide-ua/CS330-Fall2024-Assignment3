@@ -79,9 +79,8 @@ namespace Fall2024_Assignment3_rweide.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("PosterURL")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<byte[]>("Photo")
+                        .HasColumnType("BLOB");
 
                     b.Property<int>("YearOfRelease")
                         .HasColumnType("INTEGER");

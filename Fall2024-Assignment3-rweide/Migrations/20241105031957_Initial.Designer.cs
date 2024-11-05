@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fall2024_Assignment3_rweide.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241105020122_Initial")]
+    [Migration("20241105031957_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -82,9 +82,8 @@ namespace Fall2024_Assignment3_rweide.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("PosterURL")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<byte[]>("Photo")
+                        .HasColumnType("BLOB");
 
                     b.Property<int>("YearOfRelease")
                         .HasColumnType("INTEGER");

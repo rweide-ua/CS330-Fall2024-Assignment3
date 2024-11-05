@@ -77,7 +77,7 @@ namespace Fall2024_Assignment3_rweide.Migrations
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Genre = table.Column<string>(type: "TEXT", nullable: false),
                     YearOfRelease = table.Column<int>(type: "INTEGER", nullable: false),
-                    PosterURL = table.Column<string>(type: "TEXT", nullable: false)
+                    Photo = table.Column<byte[]>(type: "BLOB", nullable: true)
                 },
                 constraints: table =>
                 {

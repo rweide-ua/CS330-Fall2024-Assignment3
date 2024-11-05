@@ -7,7 +7,6 @@ namespace Fall2024_Assignment3_rweide.Models
         [Key]
         public int Id { get; set; }
 
-
         [Required]
         public string IMDBMovieID { get; set; }
         [Required]
@@ -16,8 +15,7 @@ namespace Fall2024_Assignment3_rweide.Models
         public string Genre { get; set; }
         [Required]
         public int YearOfRelease { get; set; }
-        [Required]
-        public string PosterURL { get; set; }
+        public byte[]? Photo { get; set; }
 
         public ICollection<Actor> Actors { get; set; } = new List<Actor>();
     }

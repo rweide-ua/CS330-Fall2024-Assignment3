@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Fall2024_Assignment3_rweide.Data;
 using Fall2024_Assignment3_rweide.Models;
 using VaderSharp2;
+using System.Numerics;
 
 namespace Fall2024_Assignment3_rweide.Controllers
 {
@@ -92,10 +93,16 @@ namespace Fall2024_Assignment3_rweide.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,IMDBMovieID,Name,Genre,YearOfRelease,PosterURL")] Movie movie)
+        public async Task<IActionResult> Create([Bind("Id,IMDBMovieID,Name,Genre,YearOfRelease")] Movie movie, IFormFile? photo)
         {
             if (ModelState.IsValid)
             {
+                if (photo != null && photo.Length > 0)
+                {
+                    using var memoryStream = new MemoryStream(); // Dispose() for garbage collection 
+                    photo.CopyTo(memoryStream);
+                    movie.Photo = memoryStream.ToArray();
+                }
                 _context.Add(movie);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -124,17 +131,31 @@ namespace Fall2024_Assignment3_rweide.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,IMDBMovieID,Name,Genre,YearOfRelease,PosterURL")] Movie movie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,IMDBMovieID,Name,Genre,YearOfRelease,Photo")] Movie movie, IFormFile? photo)
         {
             if (id != movie.Id)
             {
                 return NotFound();
             }
 
+            var existingMovie = await _context.Movie
+                .AsNoTracking().FirstOrDefaultAsync(mo => mo.Id == id);
+
+            byte[]? existingMoviePhoto = existingMovie!.Photo;
+
             if (ModelState.IsValid)
             {
                 try
                 {
+                    if (photo != null && photo.Length > 0)
+                    {
+                        using var memoryStream = new MemoryStream(); // Dispose() for garbage collection 
+                        photo.CopyTo(memoryStream);
+                        movie.Photo = memoryStream.ToArray();
+                    } else
+                    {
+                        movie.Photo = existingMoviePhoto;
+                    }
                     _context.Update(movie);
                     await _context.SaveChangesAsync();
                 }
