@@ -4,9 +4,9 @@
     ViewData["Title"] = "Movie List";
 }
 
-<h1>Movie List</h1>
+<h1 class="title-font">Movie List</h1>
 
-<p>
+<p class="title-font">
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
@@ -30,13 +30,13 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="script-font">
 @foreach (var item in Model) {
         <tr>
             <td>
                 <a href="https://www.imdb.com/title/@item.IMDBMovieID">Link</a>
             </td>
-            <td>
+            <td class="title-font">
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>

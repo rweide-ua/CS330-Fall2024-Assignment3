@@ -4,12 +4,12 @@
     ViewData["Title"] = "Actor Details";
 }
 
-<h1>Details</h1>
+<h1 class="title-font">Details</h1>
 
 <div>
-    <h4>Actor</h4>
+    <h4 class="title-font">Actor</h4>
     <hr />
-    <dl class="row">
+    <dl class="row script-font">
         <dt class="col-sm-2">
             IMDB Actor ID
         </dt>
@@ -25,7 +25,7 @@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Actor.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-10 title-font">
             @Html.DisplayFor(model => model.Actor.Name)
         </dd>
         <dt class = "col-sm-2">
@@ -58,7 +58,7 @@
     <a asp-action="Index">Back to List</a>
 </div>
 <table class="table">
-    <thead>
+    <thead class="title-font">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Movies)
@@ -66,7 +66,7 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="title-font">
         @foreach (var item in Model.Movies)
         {
             <tr>
@@ -83,7 +83,7 @@
     </tbody>
 </table>
 <table class="table">
-    <thead>
+    <thead class="title-font">
         <tr>
             <th>
                 Tweets
@@ -93,7 +93,7 @@
             </th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="script-font">
         @foreach (var item in Model.Tweets)
         {
             <tr>

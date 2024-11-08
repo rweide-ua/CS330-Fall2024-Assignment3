@@ -4,13 +4,13 @@
     ViewData["Title"] = "Castings List";
 }
 
-<h1>Castings List</h1>
+<h1 class="title-font">Castings List</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
-    <thead>
+    <thead class="title-font">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Movie)
@@ -21,13 +21,13 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="script-font">
 @foreach (var item in Model) {
         <tr>
-            <td>
+            <td class="title-font">
                 @Html.DisplayFor(modelItem => item.Movie.Name)
             </td>
-            <td>
+            <td class="title-font">
                 @Html.DisplayFor(modelItem => item.Actor.Name)
             </td>
             <td>
