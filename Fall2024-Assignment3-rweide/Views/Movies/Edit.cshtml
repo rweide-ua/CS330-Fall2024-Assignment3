@@ -14,7 +14,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="IMDBMovieID" class="control-label">IMDB Identifier (i.e. the tt4154796 in https://www.imdb.com/title/<strong>tt4154796</strong>/)</label>
+                <label asp-for="IMDBMovieID" class="control-label">IMDB Movie ID (i.e. the tt4154796 in https://www.imdb.com/title/<strong>tt4154796</strong>/)</label>
                 <input asp-for="IMDBMovieID" class="form-control" />
                 <span asp-validation-for="IMDBMovieID" class="text-danger"></span>
             </div>
@@ -29,7 +29,7 @@
                 <span asp-validation-for="Genre" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="YearOfRelease" class="control-label"></label>
+                <label asp-for="YearOfRelease" class="control-label">Year of Release</label>
                 <input asp-for="YearOfRelease" class="form-control" />
                 <span asp-validation-for="YearOfRelease" class="text-danger"></span>
             </div>
@@ -39,7 +39,7 @@
                 var imgSrc = $"data:image/jpg;base64,{base64}";
                 <div class="form-group">
                     <label for="CurrentPoster">Current Poster</label><br />
-                    <img name="CurrentPoster" src="@imgSrc" width="100" height="100" style="border-radius:50%" />
+                    <img name="CurrentPoster" src="@imgSrc" width="100" height="150" style="border-radius:50%" />
                 </div>
             }
             <div class="form-group">

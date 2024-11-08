@@ -11,7 +11,7 @@
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Movie.IMDBMovieID)
+            IMDB Movie ID
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Movie.IMDBMovieID)
@@ -35,7 +35,7 @@
             @Html.DisplayFor(model => model.Movie.Genre)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Movie.YearOfRelease)
+            Year of Release
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Movie.YearOfRelease)
@@ -48,7 +48,7 @@
                 Poster
             </dt>
             <dd class="col-sm-10">
-                <img src="@imgSrc" width="100" height="100" style="border-radius:50%" />
+                <img src="@imgSrc" width="100" height="150" />
             </dd>
         }
     </dl>

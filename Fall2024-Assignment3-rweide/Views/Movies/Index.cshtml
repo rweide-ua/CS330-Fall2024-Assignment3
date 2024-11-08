@@ -22,7 +22,7 @@
                 @Html.DisplayNameFor(model => model.Genre)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.YearOfRelease)
+                Year of Release
             </th>
             <th>
                 Poster image
@@ -50,7 +50,7 @@
                 {
                     var base64 = Convert.ToBase64String(item.Photo);
                     var imgSrc = $"data:image/jpg;base64,{base64}";
-                    <img src="@imgSrc" width="100" height="100" />
+                    <img src="@imgSrc" width="100" height="150" />
                 }
                 else
                 {

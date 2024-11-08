@@ -13,7 +13,7 @@
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="IMDBActorID" class="control-label">IMDB Identifier (i.e. the nm0000375 in https://www.imdb.com/name/<strong>nm0000375</strong>/)</label>
+                <label asp-for="IMDBActorID" class="control-label">IMDB Actor ID (i.e. the nm0000375 in https://www.imdb.com/name/<strong>nm0000375</strong>/)</label>
                 <input asp-for="IMDBActorID" class="form-control" />
                 <span asp-validation-for="IMDBActorID" class="text-danger"></span>
             </div>

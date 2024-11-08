@@ -20,3 +20,7 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.filter-white {
+    filter: invert(100%) sepia(0%) saturate(6323%) hue-rotate(146deg) brightness(127%) contrast(110%);
+}
