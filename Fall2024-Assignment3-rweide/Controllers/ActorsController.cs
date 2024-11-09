@@ -71,10 +71,10 @@ namespace Fall2024_Assignment3_rweide.Controllers
             var tweet2 = new TextSentimentPair("This thing is AWFUL", -0.9f);
             var tweet3 = new TextSentimentPair("I am neutral about this topic", 0.01f);
 
-            ChatCompletion completion = chatClient.CompleteChat(new UserChatMessage("Write twenty tweets as if they were written by actor " + actor.Name + ". Make sure these are true to the actor's personality and base these off of their existing tweets. These tweets should follow the real rules of Twitter, where each tweet only contains 140 characters or less. Some tweets can have hashtags in them, but not all tweets should. PLEASE make sure to return the tweets with semicolons separating them for easier separation in code later. Do not add brackets at the beginning and ending. An example response should be, without brackets: [Here's a tweet; Here's another tweet; Here's yet another tweet]. PLEASE do not surround the enclosed tweets with quotation marks. PLEASE ensure there are no brackets at the start or end of the response. Tweets should only be separated by a SINGLE semicolon, not two or three. Additionally, the contents of a tweet should NOT contain a semicolon WHATSOEVER. DO NOT UNDER ANY CIRCUMSTANCE GIVE A RESPONSE THAT STARTS WITH \"As an AI language model\". ONLY RESPOND WITH THE REQUESTED TEXT."));
+            ChatCompletion completion = chatClient.CompleteChat(new UserChatMessage("Write twenty tweets as if they were written by actor " + actor.Name + ". Make sure these are true to the actor's personality and base these off of their existing tweets. These tweets should follow the real rules of Twitter, where each tweet only contains 140 characters or less. Some tweets can have hashtags in them, but not all tweets should. PLEASE make sure to return the tweets with three $ symbols separating them for easier separation in code later. Do not add brackets at the beginning and ending. An example response should be, without brackets: [Here's a tweet$$$ Here's another tweet$$$ Here's yet another tweet]. PLEASE do not surround the enclosed tweets with quotation marks. PLEASE ensure there are no brackets at the start or end of the response. Tweets should be separated by three $ symbols. DO NOT UNDER ANY CIRCUMSTANCE GIVE A RESPONSE THAT STARTS WITH \"As an AI language model\". ONLY RESPOND WITH THE REQUESTED TEXT."));
 
             var aiTweets = completion.Content[0].Text;
-            string[] tweetTexts = aiTweets.Split(';');
+            string[] tweetTexts = aiTweets.Split("$$$");
 
             // tweetTexts.Add("Today just keeps getting worse and worse");
             // tweetTexts.Add("Just got a ticket to the hottest band let's goooo! I love these guys!");
@@ -107,6 +107,7 @@ namespace Fall2024_Assignment3_rweide.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,IMDBActorID,Name,Gender,Age")] Actor actor, IFormFile? photo)
         {
+
             if (ModelState.IsValid)
             {
                 if (photo != null && photo.Length > 0)
